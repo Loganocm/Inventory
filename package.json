@@ -3,19 +3,18 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-        "start:backend": "cd System && npm run start",
-        "start:frontend": "cd todos-front-end && npm run start"
+      "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+      "start:backend": "npm --prefix System install && npm --prefix System run start:server",
+      "start:frontend": "npm --prefix todos-front-end run start"
     },
     "dependencies": {
-        "express": "^4.17.1",
-        "mongoose": "^6.0.14"
+      "express": "^4.17.1",
+      "mongoose": "^6.0.14",
+      "concurrently": "^9.1.2"
     },
-    "devDependencies": {
-        "concurrently": "^9.1.2"
-    },
+    "devDependencies": {},
     "keywords": [],
     "author": "",
     "license": "ISC",
     "description": ""
-}
+  }
