@@ -1,6 +1,6 @@
 {
   "name": "todos-front-end",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://mysterious-temple-00069-c05b7bb6cec2.herokuapp.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
