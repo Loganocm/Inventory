@@ -18,6 +18,14 @@ app.use(helmet()); // Secure HTTP headers
 app.use(morgan("dev")); // Log requests
 app.use(express.json()); // Parse JSON requests
 
+app.use((req, res, next) => {
+  const allowedHosts = ['https://mysterious-temple-00069-c05b7bb6cec2.herokuapp.com/', 'localhost'];
+  if (!allowedHosts.includes(req.headers.host)) {
+    return res.status(400).send('Invalid Host');
+  }
+  next();
+});
+
 // Connect to Database & ensure default location exists after connection
 connectDB().then(() => {
   locationController.createDefaultLocation();
@@ -45,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'frontend/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
+
 
 // Define the port
 const PORT = process.env.PORT || 5000;
