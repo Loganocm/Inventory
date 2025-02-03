@@ -1,0 +1,18 @@
+{
+    "name": "inventory",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "npm run start:System && npm run start:todos-front-end",
+        "start:frontend": "cd todos-front-end && npm install && npm start",
+        "start:backend": "cd System && npm install && npm start"
+    },
+    "dependencies": {
+        "express": "^4.17.1"
+      },
+    "devDependencies": {},
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}
