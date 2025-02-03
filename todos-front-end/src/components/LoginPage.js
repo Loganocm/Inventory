@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,9 +8,17 @@ function LoginPage() {
     email: '',
     password: '',
   });
-  const [errorMessage, setErrorMessage] = useState(''); // Define errorMessage state
-
+  const [errorMessage, setErrorMessage] = useState('');
   const { email, password } = formData;
+
+  // Flag to track component mount status
+  useEffect(() => {
+    let isMounted = true;  // Default value is true
+
+    return () => {
+      isMounted = false;  // Set flag to false when component unmounts
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,25 +28,25 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send login data to backend
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, formData);
 
-      // Save the JWT token and username to localStorage
-      localStorage.setItem('token', response.data.token); // Store token
-      localStorage.setItem('username', response.data.username); // Store username
-
-      // Redirect to dashboard or another page after successful login
-      navigate('/dashboard');
+      // Ensure component is still mounted before updating state
+      if (isMounted) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.username);
+        navigate('/dashboard');
+      }
     } catch (error) {
-      // Handle error by setting error message
-      setErrorMessage(error.response?.data?.message || 'Something went wrong!');
+      if (isMounted) {
+        setErrorMessage(error.response?.data?.message || 'Something went wrong!');
+      }
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -16,15 +16,19 @@ function Dashboard() {
   const [newLocationName, setNewLocationName] = useState('');
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const fetchLocations = async () => {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
 
       if (token) {
         try {
-          const response = await fetch('http://localhost:5000/api/locations', {
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/locations`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
+            signal, // Pass the signal to the fetch request
           });
 
           if (response.ok) {
@@ -34,7 +38,9 @@ function Dashboard() {
             console.error('Failed to fetch locations:', response.statusText);
           }
         } catch (error) {
-          console.error('Error fetching locations:', error);
+          if (error.name !== 'AbortError') {
+            console.error('Error fetching locations:', error);
+          }
         }
       } else {
         console.error('No token found');
@@ -42,24 +48,32 @@ function Dashboard() {
     };
 
     fetchLocations();
-  }, []);
+
+    return () => {
+      controller.abort(); // Abort the fetch request if the component unmounts
+    };
+  }, []); // Empty dependency array, only runs once when component mounts
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const fetchProducts = async () => {
       if (selectedLocation) {
-        const token = localStorage.getItem('token'); 
+        const token = localStorage.getItem('token');
 
         if (token) {
           try {
             const url =
               selectedLocation === 'main'
-                ? 'http://localhost:5000/api/products' 
-                : `http://localhost:5000/api/products/location/${selectedLocation}`;
+                ? `${process.env.REACT_APP_BACKEND_URL}/api/products`
+                : `${process.env.REACT_APP_BACKEND_URL}/api/products/location/${selectedLocation}`;
 
             const response = await fetch(url, {
               headers: {
                 'Authorization': `Bearer ${token}`,
               },
+              signal, // Pass the signal to the fetch request
             });
 
             if (response.ok) {
@@ -69,18 +83,24 @@ function Dashboard() {
               console.error('Failed to fetch products:', response.statusText);
             }
           } catch (error) {
-            console.error('Error fetching products:', error);
+            if (error.name !== 'AbortError') {
+              console.error('Error fetching products:', error);
+            }
           }
         } else {
           console.error('No token found');
         }
       } else {
-        setProducts([]); 
+        setProducts([]); // Clear products when no location is selected
       }
     };
 
     fetchProducts();
-  }, [selectedLocation]);
+
+    return () => {
+      controller.abort(); // Abort the fetch request if the component unmounts
+    };
+  }, [selectedLocation]); // Dependency array includes selectedLocation, so the effect runs whenever it changes
 
   const handleLocationSelect = (e) => {
     const locationId = e.target.value;
@@ -100,7 +120,7 @@ function Dashboard() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch('http://localhost:5000/api/products', {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -135,13 +155,13 @@ function Dashboard() {
       location: product.location._id || '', // Set location correctly when editing
     });
   };
-  
+
   const handleUpdateProduct = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-  
+
     if (token) {
-      fetch(`http://localhost:5000/api/products/${editProduct._id}`, {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/${editProduct._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -176,7 +196,7 @@ function Dashboard() {
       console.error('No token found');
     }
   };
-  
+
   const handleCreateNewProduct = () => {
     setEditProduct(null);
     setNewProduct({ name: '', price: '', category: '', quantity: '', location: '' });
@@ -192,7 +212,7 @@ function Dashboard() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      fetch(`http://localhost:5000/api/products/${productId}`, {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/${productId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -323,17 +343,40 @@ function Dashboard() {
             type="text"
             value={newLocationName}
             onChange={(e) => setNewLocationName(e.target.value)}
-            placeholder="New Location Name"
+            placeholder="Location Name"
+            required
           />
-          <button onClick={() => alert('Location added')}>Add</button>
+          <button
+            onClick={() => {
+              const token = localStorage.getItem('token');
+              if (token) {
+                fetch(`${process.env.REACT_APP_BACKEND_URL}/api/locations`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({ name: newLocationName }),
+                })
+                  .then((response) => response.json())
+                  .then((newLocation) => {
+                    setLocations((prevLocations) => [...prevLocations, newLocation]);
+                    setNewLocationName('');
+                  })
+                  .catch((error) => console.error('Error adding location:', error));
+              } else {
+                console.error('No token found');
+              }
+            }}
+          >
+            Add Location
+          </button>
         </div>
-      </div>
 
-      <div className="user-info">
-        <div className="user-name">{currentUserName}</div>
-        <button onClick={handleSignOut} className="sign-out-btn">
-          Sign Out
-        </button>
+        <div className="sign-out">
+          <p>Welcome, {currentUserName}!</p>
+          <button onClick={handleSignOut}>Sign Out</button>
+        </div>
       </div>
     </div>
   );
