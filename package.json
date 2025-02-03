@@ -5,10 +5,12 @@
     "scripts": {
       "start": "npm run start:backend && npm run start:frontend",
       "start:frontend": "cd todos-front-end && npm install && npm start",
-      "start:backend": "cd System && npm install && npm start"
+      "start:backend": "cd System && npm install && npm run start:server", 
+      "start:server": "node server.js"
     },
     "dependencies": {
-      "express": "^4.17.1"
+      "express": "^4.17.1",
+      "mongoose": "^6.0.14"
     },
     "devDependencies": {},
     "keywords": [],
