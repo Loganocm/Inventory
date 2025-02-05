@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a full-stack application built with React for the frontend and Express.js for the backend, designed to manage product inventory and locations. It allows users to view, add, edit, and delete products, as well as manage locations. The application is designed to be deployed on Heroku.
+This project is a full-stack application built with React for the frontend and Express.js for the backend, designed to manage product inventory and locations. It allows users to view, add, edit, and delete products, as well as manage locations. 
 
 ## Features
 
