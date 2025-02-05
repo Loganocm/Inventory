@@ -23,16 +23,8 @@ This project is a full-stack application built with React for the frontend and E
 - **Backend:**
   - Node.js
   - Express.js
-  - MongoDB (via Mongoose)
+  - MongoDB
   - JWT for authentication
   - Helmet for security
   - Morgan for logging
   - Cors for handling cross-origin requests
-
-## Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/inventory-system.git
-cd inventory-system
