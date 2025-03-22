@@ -3,6 +3,9 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# My Api key
+key.txt
+
 # Environment variables
 .env
 .env.local
