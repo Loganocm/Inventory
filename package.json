@@ -5,7 +5,7 @@
     "scripts": {
       "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
       "start:backend": "npm --prefix System install && npm --prefix System run start",
-      "start:frontend": "HOST=0.0.0.0 npm --prefix todos-front-end install && npm --prefix todos-front-end run start"
+      "start:frontend": "npm --prefix todos-front-end install && npm --prefix todos-front-end run start"
     },
     "dependencies": {
       "express": "^4.17.1",

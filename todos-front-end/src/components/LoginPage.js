@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react'; 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const isMounted = useRef(true);  // Use useRef to track mount status
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
+
   const { email, password } = formData;
 
-  // Flag to track component mount status
   useEffect(() => {
-    let isMounted = true;  // Default value is true
+    isMounted.current = true;  // Component is mounted
 
     return () => {
-      isMounted = false;  // Set flag to false when component unmounts
+      isMounted.current = false;  // Cleanup: component is unmounted
     };
   }, []);
 
@@ -31,13 +33,13 @@ function LoginPage() {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, formData);
 
       // Ensure component is still mounted before updating state
-      if (isMounted) {
+      if (isMounted.current) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', response.data.username);
         navigate('/dashboard');
       }
     } catch (error) {
-      if (isMounted) {
+      if (isMounted.current) {
         setErrorMessage(error.response?.data?.message || 'Something went wrong!');
       }
     }

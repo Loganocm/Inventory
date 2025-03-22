@@ -18,9 +18,11 @@ app.use(helmet()); // Secure HTTP headers
 app.use(morgan("dev")); // Log requests
 app.use(express.json()); // Parse JSON requests
 
+const allowedHosts = ['mysterious-temple-00069-c05b7bb6cec2.herokuapp.com', 'localhost'];
+
 app.use((req, res, next) => {
-  const allowedHosts = ['https://mysterious-temple-00069-c05b7bb6cec2.herokuapp.com/', 'localhost'];
-  if (!allowedHosts.includes(req.headers.host)) {
+  const host = req.headers.host.split(':')[0]; // Ignore port numbers
+  if (!allowedHosts.includes(host)) {
     return res.status(400).send('Invalid Host');
   }
   next();
