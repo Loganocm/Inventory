@@ -18,5 +18,4 @@ const protect = (req, res, next) => {
   }
 };
 
-// Export the middleware
-module.exports = { protect };  // Correctly exporting protect
+module.exports = { protect };

@@ -1,11 +1,9 @@
 const Product = require('../models/productModel');
-const Location = require('../models/locationModel'); // Import Location model
+const Location = require('../models/locationModel');
 
 exports.createProduct = async (req, res) => {
   try {
     const { name, price, category, quantity, location } = req.body;
-
-    // Ensure location exists in the database
     const validLocation = await Location.findById(location);
     if (!validLocation) {
       return res.status(400).json({ message: "Invalid location" });
@@ -22,7 +20,6 @@ exports.createProduct = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
   try {
-    // Get all products and populate the location field with the location's name
     const products = await Product.find().populate('location', 'name'); 
     res.json(products);
   } catch (err) {
@@ -32,7 +29,6 @@ exports.getAllProducts = async (req, res) => {
 
 exports.getProductsByLocation = async (req, res) => {
   try {
-    // Get products by location and populate the location field with the location's name
     const products = await Product.find({ location: req.params.location }).populate('location', 'name');
     res.json(products);
   } catch (err) {
@@ -42,7 +38,6 @@ exports.getProductsByLocation = async (req, res) => {
 
 exports.getAllProductsFromAllLocations = async (req, res) => {
   try {
-    // Get all products and populate the location field with the location's name
     const products = await Product.find().populate('location', 'name');
     res.json(products);
   } catch (err) {
@@ -54,8 +49,6 @@ exports.updateProduct = async (req, res) => {
   try {
     const { name, price, category, quantity, location } = req.body;
     const productId = req.params.id;
-
-    // Ensure location exists in the database
     const validLocation = await Location.findById(location);
     if (!validLocation) {
       return res.status(400).json({ message: "Invalid location" });

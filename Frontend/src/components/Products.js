@@ -5,9 +5,8 @@ const Products = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Use the backend URL from the .env file
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/products`)  // This will call the URL stored in your .env
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/products`) //.env
       .then((response) => {
         setProducts(response.data);
       })

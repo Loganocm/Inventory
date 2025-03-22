@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const isMounted = useRef(true);  // Use useRef to track mount status
+  const isMounted = useRef(true);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -15,10 +15,10 @@ function LoginPage() {
   const { email, password } = formData;
 
   useEffect(() => {
-    isMounted.current = true;  // Component is mounted
+    isMounted.current = true;
 
     return () => {
-      isMounted.current = false;  // Cleanup: component is unmounted
+      isMounted.current = false;
     };
   }, []);
 
@@ -32,7 +32,6 @@ function LoginPage() {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, formData);
 
-      // Ensure component is still mounted before updating state
       if (isMounted.current) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', response.data.username);

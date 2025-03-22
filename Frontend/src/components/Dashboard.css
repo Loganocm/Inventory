@@ -1,4 +1,3 @@
-/* Global styles */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -11,7 +10,6 @@ h2 {
   color: #333;
 }
 
-/* Right Panel (Product List at the Top) */
 .right-panel {
   width: 100%;
   padding: 20px;
@@ -83,7 +81,6 @@ h2 {
   margin-top: 15px;
 }
 
-/* Left Panel (Create/Edit Panel) */
 .left-panel {
   width: 100%;
   padding: 20px;
@@ -97,7 +94,7 @@ h2 {
 .form-panel {
   margin-bottom: 20px;
   max-width: 600px;
-  margin: 0 auto;  /* Center the form */
+  margin: 0 auto;
 }
 
 form {
@@ -124,7 +121,6 @@ button[type="submit"]:hover, .add-location-panel button:hover {
   background-color: #45a049;
 }
 
-/* Location Dropdown */
 .location-dropdown {
   margin: 10px 0;
   padding: 8px;
@@ -137,7 +133,6 @@ button[type="submit"]:hover, .add-location-panel button:hover {
   margin-top: 20px;
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -157,7 +152,6 @@ button[type="submit"]:hover, .add-location-panel button:hover {
   background-color: #ddd;
 }
 
-/* User Info */
 .user-info {
   margin-top: 20px;
   padding: 10px;
@@ -182,7 +176,6 @@ button[type="submit"]:hover, .add-location-panel button:hover {
   background-color: #c82333;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .product-item {
     width: 100%;
@@ -196,7 +189,6 @@ button[type="submit"]:hover, .add-location-panel button:hover {
     font-size: 0.9em;
   }
 
-  /* Make the create/edit panel smaller */
   .left-panel {
     padding: 10px;
   }

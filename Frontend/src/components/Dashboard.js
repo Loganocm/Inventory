@@ -28,7 +28,7 @@ function Dashboard() {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
-            signal, // Pass the signal to the fetch request
+            signal,
           });
 
           if (response.ok) {
@@ -50,9 +50,9 @@ function Dashboard() {
     fetchLocations();
 
     return () => {
-      controller.abort(); // Abort the fetch request if the component unmounts
+      controller.abort();
     };
-  }, []); // Empty dependency array, only runs once when component mounts
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -73,7 +73,7 @@ function Dashboard() {
               headers: {
                 'Authorization': `Bearer ${token}`,
               },
-              signal, // Pass the signal to the fetch request
+              signal,
             });
 
             if (response.ok) {
@@ -91,16 +91,16 @@ function Dashboard() {
           console.error('No token found');
         }
       } else {
-        setProducts([]); // Clear products when no location is selected
+        setProducts([]);
       }
     };
 
     fetchProducts();
 
     return () => {
-      controller.abort(); // Abort the fetch request if the component unmounts
+      controller.abort();
     };
-  }, [selectedLocation]); // Dependency array includes selectedLocation, so the effect runs whenever it changes
+  }, [selectedLocation]);
 
   const handleLocationSelect = (e) => {
     const locationId = e.target.value;
@@ -152,7 +152,7 @@ function Dashboard() {
       price: product.price,
       category: product.category,
       quantity: product.quantity,
-      location: product.location._id || '', // Set location correctly when editing
+      location: product.location._id || '',
     });
   };
 
@@ -172,7 +172,7 @@ function Dashboard() {
           price: newProduct.price,
           category: newProduct.category,
           quantity: newProduct.quantity,
-          location: newProduct.location, // Ensure location is part of the update
+          location: newProduct.location,
         }),
       })
         .then((response) => response.json())
@@ -188,7 +188,7 @@ function Dashboard() {
             price: '',
             category: '',
             quantity: '',
-            location: '', // Reset location after update
+            location: '',
           });
         })
         .catch((error) => console.error('Error updating product:', error));
@@ -317,8 +317,8 @@ function Dashboard() {
             />
             <select
               name="location"
-              value={newProduct.location} // Bind the location value to the state
-              onChange={handleInputChange} // Handle updates to the location
+              value={newProduct.location}
+              onChange={handleInputChange}
               required
             >
               <option value="">Select a Location</option>

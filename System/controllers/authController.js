@@ -3,32 +3,23 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/userModel');
 
-// Register a new user
 exports.registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    // Check if username and email are provided
     if (!username || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
-
-    // Check if the user already exists
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
-
-    // Create a new user
     user = new User({
       username,
       email,
-      password, // Password will be hashed by Mongoose middleware
+      password,
     });
-
     await user.save();
-
-    // Create a JWT token
     const payload = {
       userId: user._id,
       username: user.username,
@@ -43,29 +34,21 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// Login an existing user
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
-
-    // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-
-    // Compare password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-
-    // Generate a JWT token
     const payload = {
       userId: user._id,
       username: user.username,
@@ -80,13 +63,9 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// Get the logged-in user's profile
 exports.getUserProfile = async (req, res) => {
   try {
-    // Get the userId from the request user object
     const userId = req.user.userId;
-
-    // Fetch the user from the database, excluding the password field
     const user = await User.findById(userId).select('-password');
 
     if (!user) {
@@ -100,7 +79,6 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Update the user's profile
 exports.updateUserProfile = async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
@@ -109,10 +87,8 @@ exports.updateUserProfile = async (req, res) => {
     let updatedFields = {};
     if (username) updatedFields.username = username;
     if (email) updatedFields.email = email;
-    if (password) updatedFields.password = await bcrypt.hash(password, 10); // Hash new password
+    if (password) updatedFields.password = await bcrypt.hash(password, 10);
     if (role) updatedFields.role = role;
-
-    // Update the user's profile in the database
     const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, { new: true }).select('-password');
 
     if (!updatedUser) {

@@ -4,7 +4,7 @@ const locationSchema = new mongoose.Schema({
   name: { 
     type: String, 
     required: true, 
-    unique: true // Ensures no duplicate locations
+    unique: true
   },
   createdAt: {
     type: Date,
