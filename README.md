@@ -5,7 +5,7 @@ ExpressJS
 MongoDB
 
 Challenges:
-Routing, API Calls, Database Usage, 
+Routing, API Calls, Database Usage, Database integration
 
 Goals:
 Create, Read, Update, Delete Inventory information robustly
